@@ -1,44 +1,46 @@
 import React, {useState} from 'react';
+import Error from './Error';
 
-const Formulario = () => {
 
-    //state del formulario
-    const [busqueda, guardarBusqueda] = useState({
-        ciudad: '',
-        pais: ''
-    });
+const Formulario = ({busqueda,guardarBusqueda,guardarConsultar}) => {
 
-    const [error,guardarError] = useState(false)
+
+
+    const [error, guardarError] = useState(false)
 
     //extraer ciudad y pais
-    const {ciudad, pais} = {busqueda}
+    const {ciudad, pais} = busqueda
 
     //funcion que coloca los elementos en el state
+
     const handleChange = e => {
-        //actualizando state
+        //actualizar el state
         guardarBusqueda({
             ...busqueda,
             [e.target.name] : e.target.value
         })
     }
 
-    //Cuando el usuario da submit al formulario
+    //cuando el usuario da submit al formulario
     const handleSubmit = e => {
         e.preventDefault();
-        //Validación
-        if (ciudad.trim() === '' || pais.trim() === '') {
+
+        //validar
+        if(ciudad.trim() === '' || pais.trim() === '') {
             guardarError(true);
             return;
         }
-        guardarError(false)
-        //Pasar a componente principal
+        guardarError(false);
+        //pasar al componente principal
+        guardarConsultar(true);
     }
 
     return ( 
         <form
-            onSubmit= {handleSubmit}
-        > {error ? <p className="red darken-4 error">Todos los campos son obligatorios</p>  : null}
-            <div className="input-field col s12">
+            onSubmit={handleSubmit}
+        >
+        {error ? <Error mensaje="Ambos campos son obligatorios" /> : null }
+        <div className="input-field col s12">
                 <input
                     type="text"
                     name="ciudad"
@@ -46,7 +48,7 @@ const Formulario = () => {
                     value={ciudad}
                     onChange={handleChange}
                 />
-                <label htmlFor="ciudad">Ciudad:</label>
+                <label htmlFor="ciudad">Ciudad: </label>
             </div>
             <div className="input-field col s12">
                 <select
@@ -64,16 +66,17 @@ const Formulario = () => {
                     <option value="ES">España</option>
                     <option value="PE">Perú</option>
                 </select>
-                <label htmlFor="pais">País:</label>
+                <label htmlFor="pais">País: </label>
             </div>
             <div className="input-field col s12">
-                <button
+                <input  
                     type="submit"
-                    className="waves-effect waves-light btn-large btn-block yellow accent-4 col s12"
-                >Buscar Clima</button>
+                    value="Buscar Clima"
+                    className="waves-effect waves-light btn-large btn-block yellow accent-4"
+                />
             </div>
         </form>
      );
 }
- 
+
 export default Formulario;
